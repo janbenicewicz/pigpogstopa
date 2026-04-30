@@ -1,3 +1,4 @@
+ï»¿
 using UnityEngine;
 
 public class PointSystem : MonoBehaviour
@@ -37,7 +38,7 @@ public class PointSystem : MonoBehaviour
 
         Debug.Log("Gracz 1: " + scorePlayer1 + " | Gracz 2: " + scorePlayer2);
 
-        // Sprawdzenie czy ktoœ wygra³
+        // Sprawdzenie czy ktoï¿½ wygraï¿½
         if (scorePlayer1 >= maxScore)
         {
             EndGame(1);
@@ -49,7 +50,7 @@ public class PointSystem : MonoBehaviour
             return;
         }
 
-        // Reset pi³ki po punkcie
+        // Reset piï¿½ki po punkcie
         if (ball != null)
             ball.ResetBall();
     }
@@ -58,7 +59,7 @@ public class PointSystem : MonoBehaviour
     {
         gameEnded = true;
 
-        Debug.Log("KONIEC GRY! Wygral czarnuch numer: " + winner);
+        Debug.Log("KONIEC GRY! Wygral gracz numer: " + winner);
 
         // Zatrzymanie gry
         Time.timeScale = 0f;
