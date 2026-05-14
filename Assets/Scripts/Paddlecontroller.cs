@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PaddleController : MonoBehaviour
 {
@@ -11,8 +11,19 @@ public class PaddleController : MonoBehaviour
     public float verticalLimit = 3f;
     public float fixedZPosition = 0f;
 
+    [Header("Forehand / Backhand Tilt")]
+    [Tooltip("Kat przechylenia paletki przy forehand/backhand (stopnie)")]
+    public float tiltAngle = 30f;
+    [Tooltip("Jak plynnie paletka sie przechyla (wyzsze = szybciej)")]
+    public float tiltSpeed = 8f;
+
     private float originX;
     private float originY;
+    private float currentTilt = 0f;   // aktualny kat Z (interpolowany)
+    private bool isForehand = true;    // true = kursor po prawej
+
+    // Publiczna wlasciwosc - PingPongBall moze to odczytac
+    public bool IsForehand => isForehand;
 
     void Start()
     {
@@ -52,18 +63,30 @@ public class PaddleController : MonoBehaviour
 
     void RotateBasedOnCursor()
     {
-        // Polowa szerokosci ekranu
         float screenCenter = Screen.width / 2f;
+        isForehand = Input.mousePosition.x >= screenCenter;
 
-        if (Input.mousePosition.x >= screenCenter)
+        float targetYaw;   // obrot Y (strona paletki)
+        float targetTilt;  // obrot Z (przechylenie)
+
+        if (isForehand)
         {
-            // Kursor po prawej - normalna rotacja
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            // Kursor po prawej - FOREHAND
+            // Paletka przechylona w prawo -> pilka odbija sie w lewo
+            targetYaw  =   0f;
+            targetTilt = -tiltAngle;
         }
         else
         {
-            // Kursor po lewej - obrot o 180 stopni
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            // Kursor po lewej - BACKHAND
+            // Paletka przechylona w lewo -> pilka odbija sie w prawo
+            targetYaw  = 180f;
+            targetTilt =  tiltAngle;
         }
+
+        // Plynne przejscie kata przechylenia
+        currentTilt = Mathf.LerpAngle(currentTilt, targetTilt, tiltSpeed * Time.deltaTime);
+
+        transform.rotation = Quaternion.Euler(0f, targetYaw, currentTilt);
     }
 }
