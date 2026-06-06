@@ -15,28 +15,28 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Max Values")]
     public float max_delta = 0.3f;
-    public float max_ballVelocityRangeX = 10;
+    public float max_ballVelocityRangeX = 0.5f;
     public float max_ballBaseVelocityZ = 20;
     public float max_ballVelocityRangeZ = 6;
 
     [Header("Min Values")]
     public float min_delta = 0.05f;
-    public float min_ballVelocityRangeX = 5;
+    public float min_ballVelocityRangeX = 0.3f;
     public float min_ballBaseVelocityZ = 10;
     public float min_ballVelocityRangeZ = 2;
 
     [Header("Difficulty")]
     [Range(0,1)]
     public float difficulty = 0.5f;
-    //Poziom trudnoœci mo¿ecie ustalaæ przez t¹ wartoœæ
-    //0 = ³atwy
-    //0.5 = œredni
+    //Poziom trudnoï¿½ci moï¿½ecie ustalaï¿½ przez tï¿½ wartoï¿½ï¿½
+    //0 = ï¿½atwy
+    //0.5 = ï¿½redni
     //1 = trundy
 
     [Header("References")]
     public Rigidbody ball;
-
-
+    private bool canUseSpace = true;//clanker 
+    
     //Musicie podpiac odbicie przeciwnika po resecie pilki po zdobyciu punktu
 
 
@@ -48,13 +48,22 @@ public class EnemyAI : MonoBehaviour
 
 
     //Do testowania---------------
+    //private void Update()
+    //{
+        //if (Input.GetKeyDown(KeyCode.Space)) 
+        //{
+           // Bounce();
+       // }
+   // }
+    
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Space) && canUseSpace) //clanker
         {
             Bounce();
+            canUseSpace = false;
         }
-    }
+    }                                                      //clanker
     //----------------------------
 
     private void FixedUpdate()
@@ -82,10 +91,10 @@ public class EnemyAI : MonoBehaviour
         //Obliczamy docelowa pozycje paletki
         Vector3 ballposition = ball.transform.position;
 
-        //Obliczamy kierunek w ktorym paletka powinna siê poruszyc
+        //Obliczamy kierunek w ktorym paletka powinna siï¿½ poruszyc
         Vector3 desiredPalletPosition = ballposition - transform.position;
 
-        //Nie uwzglêdniamy zmiany pozycji w osi Z
+        //Nie uwzglï¿½dniamy zmiany pozycji w osi Z
         desiredPalletPosition.z = 0;
 
         transform.Translate(desiredPalletPosition * Mathf.Lerp(min_delta, max_delta, difficulty));
@@ -106,7 +115,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    //Odbicie pi³ki
+    //Odbicie piï¿½ki
     public void Bounce()
     {
         //Losujemy poszczegolne predkosci
@@ -124,6 +133,17 @@ public class EnemyAI : MonoBehaviour
 
         ball.velocity = new Vector3(velocityX, velocityY, velocityZ);
 
+
+    
+         
+         
+    
+    
     }
 
+    public void ResetSpace() //clanker
+    {
+        canUseSpace = true;
+    }                       //clanker
+         
 }
