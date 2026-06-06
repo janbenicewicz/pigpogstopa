@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PointSystem : MonoBehaviour
 {
@@ -38,7 +37,7 @@ public class PointSystem : MonoBehaviour
 
         Debug.Log("Gracz 1: " + scorePlayer1 + " | Gracz 2: " + scorePlayer2);
 
-        // Sprawdzenie czy kto� wygra�
+        // Sprawdzenie czy ktoś wygrał
         if (scorePlayer1 >= maxScore)
         {
             EndGame(1);
@@ -50,9 +49,16 @@ public class PointSystem : MonoBehaviour
             return;
         }
 
-        // Reset pi�ki po punkcie
+        // Reset piłki po punkcie
         if (ball != null)
             ball.ResetBall();
+
+        if (ball != null)
+        {
+            ball.ResetBall();
+
+            FindObjectOfType<EnemyAI>().ResetSpace();
+        }    
     }
 
     void EndGame(int winner)
@@ -64,7 +70,6 @@ public class PointSystem : MonoBehaviour
         // Zatrzymanie gry
         Time.timeScale = 0f;
 
-        // Opcjonalnie zatrzymanie edytora Unity
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif

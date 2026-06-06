@@ -944,29 +944,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 666226938}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b380fd7290de73c4382ae8220202ed03, type: 3}
+  m_Script: {fileID: 11500000, guid: fe7d81a5d5acc6d4ba63ac2c731c6801, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 1547089419}
-  followSpeed: 8
-  maxOffset: 0.5
-  horizontalLimit: 1
-  verticalLimit: 3
-  aiSkill: 0.899
-  defenseMistakeChance: 0.6
-  dodgeChance: 1
-  dodgeDistance: 2
-  dodgeCooldown: 2
-  reactionDelay: 0.98
-  badShotChance: 0.25
-  autoSyncDebuffs: 1
-  useCharge: 1
-  chargeSpeed: 40
-  maxCharge: 100
-  shotCooldown: 0.5
-  powerAtZero: 2
-  powerAtFull: 5
-  freezeDistance: 2.81
+  max_paddleY: 7
+  min_paddleY: 2
+  max_paddleX: 3
+  min_paddleX: -11
+  max_delta: 0.3
+  max_ballVelocityRangeX: 10
+  max_ballBaseVelocityZ: 20
+  max_ballVelocityRangeZ: 6
+  min_delta: 0.05
+  min_ballVelocityRangeX: 5
+  min_ballBaseVelocityZ: 10
+  min_ballVelocityRangeZ: 2
+  difficulty: 0.5
+  ball: {fileID: 0}
 --- !u!1 &751962544
 GameObject:
   m_ObjectHideFlags: 0
