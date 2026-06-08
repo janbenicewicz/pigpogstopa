@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using TMPro;
 
 public class PointSystem : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class PointSystem : MonoBehaviour
     [Header("Ustawienia gry")]
     public int maxScore = 10;
 
+    [Header("UI")]
+    public TMP_Text playerScoreText;
+    public TMP_Text enemyScoreText;
+
     private static int scorePlayer1 = 0;
     private static int scorePlayer2 = 0;
 
@@ -19,9 +24,12 @@ public class PointSystem : MonoBehaviour
     void Start()
     {
         GetComponent<Collider>().isTrigger = true;
+
         scorePlayer1 = 0;
         scorePlayer2 = 0;
         gameEnded = false;
+
+        UpdateScoreUI();
     }
 
     void OnTriggerEnter(Collider other)
@@ -34,6 +42,8 @@ public class PointSystem : MonoBehaviour
             scorePlayer1++;
         else
             scorePlayer2++;
+
+        UpdateScoreUI();
 
         Debug.Log("Gracz 1: " + scorePlayer1 + " | Gracz 2: " + scorePlayer2);
 
@@ -51,14 +61,22 @@ public class PointSystem : MonoBehaviour
 
         // Reset piłki po punkcie
         if (ball != null)
-            ball.ResetBall();
-
-        if (ball != null)
         {
             ball.ResetBall();
 
-            FindObjectOfType<EnemyAI>().ResetSpace();
-        }    
+            EnemyAI enemyAI = FindObjectOfType<EnemyAI>();
+            if (enemyAI != null)
+                enemyAI.ResetSpace();
+        }
+    }
+
+    void UpdateScoreUI()
+    {
+        if (playerScoreText != null)
+            playerScoreText.text = scorePlayer1.ToString();
+
+        if (enemyScoreText != null)
+            enemyScoreText.text = scorePlayer2.ToString();
     }
 
     void EndGame(int winner)
@@ -67,7 +85,6 @@ public class PointSystem : MonoBehaviour
 
         Debug.Log("KONIEC GRY! Wygral gracz numer: " + winner);
 
-        // Zatrzymanie gry
         Time.timeScale = 0f;
 
 #if UNITY_EDITOR
