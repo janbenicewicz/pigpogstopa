@@ -10,7 +10,6 @@ public class EnemyAI : MonoBehaviour
     public float max_paddleX = 3;
     public float min_paddleX = -11;
 
-
     private bool shouldMove = false;
 
     [Header("Max Values")]
@@ -26,19 +25,13 @@ public class EnemyAI : MonoBehaviour
     public float min_ballVelocityRangeZ = 2;
 
     [Header("Difficulty")]
-    [Range(0,1)]
+    [Range(0, 1)]
     public float difficulty = 0.5f;
-    //Poziom trudno�ci mo�ecie ustala� przez t� warto��
-    //0 = �atwy
-    //0.5 = �redni
-    //1 = trundy
 
     [Header("References")]
     public Rigidbody ball;
-    private bool canUseSpace = true;//clanker 
-    
-    //Musicie podpiac odbicie przeciwnika po resecie pilki po zdobyciu punktu
 
+    private bool canUseSpace = true;
 
     private void Start()
     {
@@ -46,36 +39,23 @@ public class EnemyAI : MonoBehaviour
         Bounce();
     }
 
-
-    //Do testowania---------------
-    //private void Update()
-    //{
-        //if (Input.GetKeyDown(KeyCode.Space)) 
-        //{
-           // Bounce();
-       // }
-   // }
-    
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && canUseSpace) //clanker
+        if (Input.GetKeyDown(KeyCode.Space) && canUseSpace)
         {
+            ball.GetComponent<PingPongBall>()?.UnlockDirection();
             Bounce();
+
             canUseSpace = false;
         }
-    }                                                      //clanker
-    //----------------------------
+    }
 
     private void FixedUpdate()
     {
         if (shouldMove)
-        {
             Move();
-        }
     }
 
-
-    //Paddle following
     public void StartMoving()
     {
         shouldMove = true;
@@ -88,19 +68,13 @@ public class EnemyAI : MonoBehaviour
 
     private void Move()
     {
-        //Obliczamy docelowa pozycje paletki
         Vector3 ballposition = ball.transform.position;
-
-        //Obliczamy kierunek w ktorym paletka powinna si� poruszyc
         Vector3 desiredPalletPosition = ballposition - transform.position;
 
-        //Nie uwzgl�dniamy zmiany pozycji w osi Z
         desiredPalletPosition.z = 0;
 
         transform.Translate(desiredPalletPosition * Mathf.Lerp(min_delta, max_delta, difficulty));
 
-
-        //uwzgledniamy maksymalna granice pozycji
         transform.position = new Vector3(
             Mathf.Clamp(transform.position.x, min_paddleX, max_paddleX),
             Mathf.Clamp(transform.position.y, min_paddleY, max_paddleY),
@@ -115,11 +89,8 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    //Odbicie pi�ki
     public void Bounce()
     {
-        //Losujemy poszczegolne predkosci
-
         float velocityX = Random.Range(
             Mathf.Lerp(min_ballVelocityRangeX, max_ballVelocityRangeX, difficulty),
             -Mathf.Lerp(min_ballVelocityRangeX, max_ballVelocityRangeX, difficulty));
@@ -132,18 +103,10 @@ public class EnemyAI : MonoBehaviour
                 -Mathf.Lerp(min_ballVelocityRangeZ, max_ballVelocityRangeZ, difficulty));
 
         ball.velocity = new Vector3(velocityX, velocityY, velocityZ);
-
-
-    
-         
-         
-    
-    
     }
 
-    public void ResetSpace() //clanker
+    public void ResetSpace()
     {
         canUseSpace = true;
-    }                       //clanker
-         
+    }
 }

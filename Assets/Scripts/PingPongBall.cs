@@ -8,19 +8,21 @@ public class PingPongBall : MonoBehaviour
     [Header("Ustawienia")]
     public float speed = 5f;
 
-    // ChargeShotSystem ustawia to na true gdy przejmuje kontrolę
     [HideInInspector] public bool controlledByChargeShot = false;
 
     private Vector3 startPosition;
     private Rigidbody rb;
     private Vector3 direction;
 
+    private bool directionLocked = true; // ball starts locked
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         startPosition = transform.position;
+
         direction = (player.position - transform.position).normalized;
-        rb.velocity = direction * speed;
+        rb.velocity = Vector3.zero; // start locked
     }
 
     void Update()
@@ -29,9 +31,24 @@ public class PingPongBall : MonoBehaviour
             ResetBall();
     }
 
+    void FixedUpdate()
+    {
+        if (directionLocked)
+        {
+            Vector3 vel = rb.velocity;
+
+            vel.x = 0f;
+            vel.z = 0f;
+
+            if (Mathf.Abs(vel.y) < 0.1f)
+                vel.y = 0f;
+
+            rb.velocity = vel;
+        }
+    }
+
     void OnCollisionEnter(Collision collision)
     {
-        // jeśli ChargeShotSystem przejął kontrolę – nie nadpisuj velocity
         if (controlledByChargeShot) return;
 
         if (collision.transform == player)
@@ -55,9 +72,18 @@ public class PingPongBall : MonoBehaviour
     {
         controlledByChargeShot = false;
         rb.isKinematic = false;
+
         rb.velocity = Vector3.zero;
         transform.position = startPosition;
-        direction = (player.position - transform.position).normalized;
+
+        directionLocked = true; // LOCK BALL AFTER RESET
+    }
+
+    public void UnlockDirection()
+    {
+        directionLocked = false;
+
+        direction = Vector3.up;
         rb.velocity = direction * speed;
     }
 }
